@@ -1,0 +1,919 @@
+=================================================================================================================================================================================================================================
+|												MODELO TCP/IP															|
+=================================================================================================================================================================================================================================
+Como tambien se les llama a las capas:
+
+*capa transporte				> segmento o packet segment
+*capa de red					> paquete o packet
+*capa de enlace 				> trama o frame
+*capa fisica					> bits
+
+
+
+=================================================================================================================================================================================================================================
+|												MODELO OSI															|
+=================================================================================================================================================================================================================================
+
+Como también se les conoce a las capas:
+
+*capa de aplicación				> L7 PDU
+*capa de presentación				> L6 PDU
+*capa de sesión					> L5 PDU
+*capa de transporte				> L4 PDU
+*capa de red					> L3 PDU
+*capa de enlace de datos			> L2 PDU 
+*capa fisica					> L1 PDU
+
+
+
+
+
+
+
+
+
+==========================================================
+		CAPAS DEL MODEL TCP/IP
+==========================================================
+CAPA 1:
+---------
+Ethernet, wlan
+
+
+CAPA 2:
+	forwarding	> eleccion de puertos por los que reenviar trama
+	flooding	> reenviar trama por todos los puertos excepto por el de llegada
+	learning	> añadir direcciones MAC y interfaz origen a la MAC address table.
+
+
+CAPA 3:
+
+
+
+CAPA 4:
+
+
+CAPA 5:
+
+
+
+CAPA 6:
+
+
+
+CAPA 7:
+
+
+
+
+
+==========================================================================================================================
+||					CONFIGURACIÓN DE EQUIPOS CISCO							||
+==========================================================================================================================
+*Existen 3 modos en cisco, los cuales se accede progresivamente:
+
+modo 'EXEC USUARIO:
+	-Este es el modo al que entramos a penas entremos al equipo cisco (ya sea un router o un s)
+	-permite consultar información sobre el estado del equipo.
+	-cierta información no es accesible
+	-no permite modificaciones
+	-comandos muy limitados
+	-Este es como si fuera un modo solo lectura
+	-se carácterisa por que el promt finaliza con '>'
+	
+
+	modo 'EXEC PRIVILEGIADO':
+		-Se accede mediante el comando 'enable' o en su forma abreviaba 'en' desde el modo 'exec usuario'
+		-normalmente requiere una contraseña, para permitir solo a usuarios autorizados
+		-permite todos los modos comandos de control
+		-tener cuidado ya que algún cambio puede afectar el funcionamiento de la red
+		-se carácteriza por que el promt finaliza con '#'
+
+		modo 'CONFIGURACIÓN GLOBAL':
+			-Se accede al una vez estes en el modo 'exec privilegiado' con el comando 'configure terminal' o 'conf t'
+			-No requiere contraseña (ya estás en el modo privilegiado)
+			-permite ejecutar comandos de configuración
+			-se carácteriza por que el promt finaliza con '(config)#'
+			-organiza los comandos en SUB-MODOS:
+				-interface 				(config-if)# para configurar carácteristicas de las interfaces. 
+				-interface gigabitEthernet 0/1		para configurar una interfaz en especifico.
+					-shutdown			para apagar esa interfaz
+					-no shutdown			para prender la interfaz apagada.
+
+				-line 					(config-line)# para configurar los accesos por telent, ssh o consola, ya sean los password, equipos permitidos, etc.
+
+				-crouter 				(config-router)# para configurar los protocolos de enrutamiento	
+				-vlan 					(config-vlan)#para configurar las virtuals lans.
+
+
+*para salir usamos exit o end o control+z.
+	-end o control+z sale hasta el modo privilegiado.
+	-exit sale por capas
+	-disable sale al modo usuario sin cerrar la sesión.
+
+
+reload								este comando sirve para reiniciar el equipo cisco.
+
+
+
+comandos:
+---------------------
+*cuando un comando vota mucha información, podemos avanzar de 2 formas, con 'enter' linea a linea o con 'barra espaciadora' todo de golpe.
+*No es necesario escribir todo el nombre de un comando, con escribir una parte basta.
+*se puede escribir tambien una parte y luego pulsamos 'tabular' que completara de forma automatica el comando (Si hay muchas opciones no la completara).
+*c? , para este ejemplo nos mostrara todas las opciones que empiezen con 'c' o cualquier carácter que hayamos puesto o combinación de carácter.
+
+
+switch>?				al escribir '?' nos mostrara todos los comandos disponibles para este mode
+switch>show ?				al escribir '?' despues de un comando nos mostrara todas opciones o atributos que tiene ese comando.
+swtich>show arp ?			si al escribir todo es nos devuelve <cr> significa que este comando ya no acepta mas parametros.
+
+
+
+
+
+PARA CONECTARTE POR TELNET O SSH
+------------------------------------------
+*Para conectarte por telnet o SSH es obligatorio por parte de cisco que 'exec privilegiado' tenga una contraseña.
+
+telnet ip-maquina			#nos conectara por telnet al equipo, nos pedira usuario y contraseña de conexión.
+ssh -l nameusuario ip-maquina		#nos pedira la contraseña para poder conectarnos al equipo. (ojo que no es la contraseña de exec privilegiado)
+
+
+
+----------------------------------
+MEMORIAS:
+----------------------------------
+*Por lo general existen 4 tipos de memorias en un equipo cisco.
+	-rom			BootStrap: Comprueba hardware + Instrucciones de arranque: Inicializa IOS
+	-flash			IOS (sistema operativo)
+	-ram			ios en ejecución				<--> 	running configuration file
+				configuración activa del equipo
+	-nvram			archivo de configuración de inicio		<-->	startup configuration file
+
+
+
+Para guardar la nueva configuración:
+------------------------------------
+*para guardar los cambios hechos, usamos el comando 'copy running-config startup-config'.
+*o 'write memory'
+
+
+Para borrar la configuración y reiniciar de fabrica:
+----------------------------------------------------
+*erase startup-config
+*erase nvram:			#esto no funciona solo en packet tracer
+*write erase
+
+
+
+
+
+show running-config				#muestra la configuración activa que hay en la memoria RAM.
+show startup-config				#la configuración de inicio que hay en la nvram
+
+show flash					muestra el contenido de la memoria flash
+show version					muestra la version de ios que tiene activa el equipo. vemos también la versión del boostrap de la rom, también vemos el modelo del equipo	
+
+
+
+
+
+	TIPOS DE CABLE DE CONEXIÓN ETHERNET:
+---------------------------------------------------
+*Para conectar mismos equipos por lo general se usa un cable cruzado, y equipos diferentes cable recto. (pero tener en cuenta los pines OJO)
+
+
+cable recto (Cooper Straight-Through)
+--------------------------------------
+*los pines 1 y 2 de un lado son los mismos que el otro lado
+*los pines 3 y 6 de un lado son los mismos que el otro lado
+
+
+cable cruzado (Copper Cross-Over)
+----------------------------------
+*los pines 1 y 2 de un lado son los 3 y 6 en el otro lado.
+*los pines 3 y 6 de un lado son los 1 y 2 en el otro lado.
+
+
+
+
+
+Equipos que transmiten por los pines 1 y 2: 
+---------------------------------------------
+Son llamados también MDI (medium dependent interface)
+
+*pc
+*server
+*router
+*firewall
+*access point
+
+
+Equipos que transmiten por los pines 3 y 6:
+---------------------------------------------
+Son llamados también MDI-X (medium dependent interface Crossover)
+*swtich
+*hub
+
+
+
+
+
+
+
+
+show mac address-table				muestra las tablas mac del switch o routing
+clear mac address-table				limpia las tablas mac del equipo
+
+
+
+
+
+Ancho de banda (bandwith)
+----------------------------
+*Velocidad maxima de transferencia de datos a travez de una ruta.
+*Capacidad maxima de envio y recepción de datos.
+*También llamada tasa de transferencia.
+*normalmente se mide en bits/segundo l bps, también puede estar en Byte/s (Ojo bit o bits es lo mismo)
+*normalmente podria estar asi también 1 Bps, Byteps, Byte/s
+*A mayor ancho de banda mas datos se podria enviar por segundo.
+
+Kilo		--> 10^3 
+Mega		--> 10^6
+Giga		--> 10^9
+Tera		--> 10^12
+
+*Nombres que reciben las interfaces de red respecto a su ancho de banda (esto lo define el estandar IEE- 802.3)
+
+	10 Mbits/s	--> Ethernet			Eth 0/0
+	100 Mbits/s	--> FastEthernet		Fa 0/0 
+	1 Gbits/s	--> GigabitEthernet		Gi 0/0
+	10 Gbits/s 	--> TenGigabitEthernet		Te 0/0
+
+
+Latencia (delay)
+---------------------
+*Tiempo que tarde en llegar una información de un extremo a otro.
+*Se suele medir en ms (mili segundos) (1000ms = 1s)
+*Mas latencia mas tarda en llegar
+
+
+
+
+
+Puerto (port):
+----------
+*El puerto hace referencia al puerto fisico, es decir a los conectores donde se conecta un cable al equipo.
+*El puerto es mas físico. (capa 1)
+
+
+
+
+Interface:
+------------------
+*Es la representación en software del puerto fisico.
+*Es donde configuramos lo que queremos que se aplique a ese puerto fisico.
+*La interfaz es mas lógico. (capa 2)
+
+	duplex:
+	--------
+		auto: se negocia la configuración del duplex
+		half: no se puede enviar y recibir a la vez
+		full: aqui si se puede enviar y recibir a la vez
+
+
+	velocidad:
+	-----------
+		auto : negocia con el otro extremo la velocidad de la interfaz.
+		10 Mbps
+		100 Mbps
+		1000 Mbps
+
+
+show interface status			# este comando nos muestra muchos parametros entre ellos el duplex, la velocidad, etc de como estan definidos.
+
+
+show interface Fa0/1 status		#nos muestra solo para la interfaz indicada.
+
+show interface fa0/1			#muestra información detallada para la interfaz indicada.
+
+
+
+*Criterios de como se regula la autonegociación. como se establece el automaico de las interfaces
+	-se establece los valores mas altos soportados por ambos equipos (entre 2 equipos ojo).
+
+	reglas de auto duplex y velocidad:
+		velocidad:
+			-autodetectar velocidades (sólo switches CISCO)
+			-Si falla la autodetección : utiliza la mas lenta
+
+		Dúplex:
+			- Si la velocidad es 10 o 100 -> Half Duplex
+			- Si la velocidad superior -> Full Duplex
+
+
+*para equipos de 100mbs es recomendable establecer full duplex en el swith y no dejarle en auto.
+
+
+speed 100				# speed establece la velocidad de la interfaz
+duplex full				# duplex establece el tipo de transmision de la interfaz.
+
+
+
+
+
+
+
+ICMP: (Internet Control Message Protocol)
+-------------------------------------------
+*Protocolo de control y notificacion de errores
+*funciona sobre el protocolo ip
+
+	echo request 	8
+	echo reply	0
+	
+
+ARP:
+--------------------------------------------
+*Es el protocolo encargado de relacionar las direcciones de capa 3 con las direcciones de capa 2. Es decir relaciona las ips con las respectivas direcciones MAC dentro de la red.
+*Es un protocolo de capa 2
+*Se consta de 2 faces:
+	petición arp (request): (pregunta que MAC tiene la ip solicitada)
+		mac origen: 
+		mac destino: ffff.ffff.ffff (mac del broadcast para enviar a todas interfaces)
+		
+	respuesta arp (reply): (la mac de la ip solicitada es la siguiente)
+		mac origen:
+		mac destino:
+
+
+
+arp -a				#este comando nos permite ver las tablas arp guardadas en nuestro sistema.
+arp -d				#Borra el contenido de las tablas ARP.
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+|					ROUTING:					|
+-----------------------------------------------------------------------------------------
+*A diferencia de los switches los routers vienen todas sus interfacez en modo shutdown (desabilitadas)
+
+
+show ip interface brief					#Nos muestra la configuracion de las interfaces y las ip que tienen asignada, aqui tambien viene la columna status y protocol
+
+show ip route						#para ver la tabla de enrutamiento del router
+
+
+route>en
+	route#configure terminal
+		route(config)#interface gigabitEthernet 0/0
+			route(config-if)#ip address 10.0.0.1 255.255.255.0		(con esto configuramos la ip del route y la mascara que tendra)
+										
+
+		route(config)#ip route   ip_deLa_red_destino    mascara_deLa_red_destino   ip_porDonde_llegara			#esto es para agregar una ip estatica al router, para redes a la cual llega saltando otras ips
+		route(config)#ip route  10.2.2.0 255.255.255.0 10.100.100.2							#este es un ejemplo, para llegar a la red 10.2.2.0/24 debe ir a la ip 10.100.100.2
+		route(config)#ip route 0.0.0.0  0.0.0.0  ip_porDonde_llegara							#para configurar una ruta por defecto para el siguiente salto del router.
+
+
+
+
+
+==================================
+||	  FRAME REWRITE:	||
+==================================
+*Se da cuando un frame pasa por un router, el router reescribe el frame para hacerla salir por otra interfaz en busca de la ip destino.
+
+
+
+
+
+
+
+==========================================================================================
+CAPA 4:
+------------------
+*Entre los protocolos mas usados y conocidos en esta capa, tenemos al protocolo TCP y UDP
+
+
+TCP:	
+--------						
+	- multiplexación					
+	- checksum					
+	- conexión					# El protocolo crea conexiones TCP, las gestiona y las finaliza. 	
+	- control de flujo					 
+	- recuperación de errores				 
+	- orden en los datos					
+
+
+
+
+**Procedimiento para crear la conexión o establecimiento: (3-way-handshake)
+
+	- Este establecimineto handshake es necesario antes de pasar los datos de tipo TCP
+	- permite la sincronización de ambos miembros (origen y destino)
+	- Crea la conexión entre SOCKETS - Apertura de puertas
+	- num SEQ
+	- num ACK
+	- FLAGS de control (llamados también bits de control )
+
+
+ PC				SERVIDOR (u otro equipo)
+-----				-----------
+paso 1:
+envia SYN			recibe SYN
+(SEQ=300 CTL=SYN)			
+
+paso 2:
+				Envia SYN, ACK
+				(SEQ=500  ACK=301  CTL=SYN,ACK)
+paso 3:
+recibe SYN, ACK
+(SEQ=301  ACK=501  CTL=ACK)
+			
+paso 4:
+				recibe ACK
+
+
+
+*SYN, viene a ser la sincronización, ACK la confirmación.
+*NºACK = NºSEQ + Tamaño en Bytes recibidos.
+* Si CTL = SYN,ACK  es lo mismo que decir que en el campo de control decimos, te confirmo la sincronización
+
+
+	-----------------------
+	 U | A | P | R | S | F
+	 R | C | S | S | Y | I
+	 G | K | H | T | N | N
+	-----------------------
+	*valor 0 y 1 de los bits de control, dependera si estan activados o no.
+
+leyenda:
+	URG: Urgente , ACK: Confirmación, PSH: Push, RST: Reset, SYN: Sincronización, FIN: Finalizado.
+
+*todos los SYN, FIN enviados tendran como valor 1 byte (por mas que no haya ningun dato enviado) (Phantom Byte)
+
+*al final del 3-way-handshake, los numeros de secuencia ya no se seguiran tomando al azar. Los valores que tomara seran en forma acendente al valor que tuvo al finalizar el 3-way-handshake
+
+
+
+
+**finalizado de la conexión es:
+	-una negociación de 4 pasos
+	-se termina la conexión desde un lado u otro de forma independiente
+	-permite liberar el socket asciado en cada extremo.
+	
+
+ PC					SERVIDOR (u otro equipo)
+-----					-----------
+paso 1:
+envia ACK,FIN		->		recibe ACK,FIN
+(SEQ=400 ACK=800 CTL=AFK,FIN)			
+
+paso 2:
+RECIBE ACK		<-		Envia ACK
+					(SEQ=800  ACK=401  CTL=ACK)
+paso 3:
+					Envia ACK,FIN
+					(SEQ=800, ACK= 401 CTL=ACK,FIN)
+
+recibe ACK, FIn 	<-
+
+			
+paso 4:
+envia ACK		->		recibe ACK
+(SEQ=401 ACK=801 CTL=ACK)
+
+
+
+
+
+
+
+
+
+
+UDP:
+----------
+	- multiplexación
+	- checksum
+
+---------------------------------------------------------
+			TCP:				|
+---------------------------------------------------------
+*Al paquete TCP se le conoce como segmento
+*La cabecera TCP es la siguiente:
+
+
+		---------------------------------------------------
+		|    puerto origen	| 	 puerto destino	  |
+		---------------------------------------------------
+		|	     NUMERO DE SECUENCIA - SEQ		  |
+		---------------------------------------------------
+		|     	     NUMERO DE CONFIRMACION - ACK	  |
+		---------------------------------------------------
+		|  OFFSET  | RESERVADO | FLAG BITS   |  VENTANA   |
+		---------------------------------------------------
+		|	   CHECKSUM		     |  URGENTE   |
+		---------------------------------------------------
+
+
+*Un socket es un punto por donde un equipo puede enviar y recibir información
+*un socket en TCP viene a estar conformado por lo siguiente:
+		   ---------
+	   	  |IP
+	socket = -|PROTOCOLO
+		  |PUERTO
+		   ---------
+
+*La comunicación en el fondo se produce de socket a socket
+*puertos conocidos (well known ports) definido por el RFC 1700, son los puertos establecidos por defecto en dota comunicación, tenemos una lista:
+*El RFC 790, aqui se establece la lista de identificadores y los protocolos correspondientes.
+	
+
+
+---------------------------------------------------------
+			UDP:				|
+---------------------------------------------------------
+*Al paquete UDP se le conoce como dataframe
+		---------------------------------------------------
+		|    puerto origen	   | 	 puerto destino	  |
+		---------------------------------------------------
+		|	   LONGITUD	   |     CHECKSUM	  |
+		---------------------------------------------------
+
+
+*permite el envio de datagramas sin establecer previamente una conexión.
+*información mínima en la cabecera.
+*no tiene confirmación - no confiable.
+*no permite el control de flujo.
+*no ordena.
+*no segmenta.
+*es un protocolo ligero
+*ideal para aplicaciones en tiempo real (para transmisiones, streaming, etc)
+
+*checksum:
+-----------
+*cuando enviamos datos por la red, puede ser que el dato se corrompa, ya sea por un error o manipulación de un hacker.
+*el checksum garantiza la integridad de los datos tanto para el protocolo udp como para el tcp.
+*en el campo checksum va una suma aritemtica con ciertos parametros de todos los datos y capas del paquete, y al llegar a su destino, la otra maquina hace la misma operación y verificia si es el mismo valor o no en el campo checksum
+y en base a ese resultado descarta o no el paquete(en tcp se reenvia y en udp se descarta)
+
+
+
+
+=====================================================================================
+-----------------------------------------------------------------------------------||
+|	 			    VIRTUAL LANS				  |||
+-----------------------------------------------------------------------------------||
+=====================================================================================
+*Tambien llamadas vlans, o v-lans
+*Tecnologia que se aplica a equipos de capa 2 (switches)
+*Es como si dentro del swtich conectaras switches virtuales.
+*permite aislar el tráfico entre diferentes VLANS. (cualquier tipo de tráfico: broadcast, multicast y unicast)
+*A nivel de diseño es importante asignar redes distintas a cada VLAN.
+
+**dominios de broadcast:
+-------------------------
+*esto se hace para que el broadcast no se envie a toda la red, segmentamos los dominios para no hacer mucho trafico y que sea mas eficiente. 
+ ya que como se sabe, un broadcast enviara los paquetes destinados al broadcast a toda la red.
+*En general, a mayor cantidad de dominios de broadcast es mejor para la red y su rendimientos.
+*un router es preciso para segmentar un dominio de broadcast, ya que este no reenvia las tramas de broadcast
+*otra forma de segmentar los dominios de broadcast es utilizando las virtual lans.
+
+
+
+¿MOTIVOS PARA UTILIZAR VLANS?
+
+-coste: evita comprar nuevos switches y routers para aislar el tráfico.
+-Limitar el número de equipos que reciben el broadcast
+-Limitar el número de equipos que reciben el flooding
+-Reduce el uso del CPU de los equipos finales y equipos de red
+-incrementa la seguridad
+-agrupar los equipos de forma lógica y no física. (por mas que esten lejos mientras esten en la misma VLANS y haya al menos enlace entre switches tendran comunicación )
+
+
+trunking (enlace troncal):
+--------------------------
+*Creamos un único enlace entre switches que transporta todas las vlans que queramos. (El estandar es 802.1Q llamado también dot1Q)
+*Esta tecnologia añade una pequeña cabecera en la trama Ethernet para diferenciar las tramas de cada VLAN
+*Los routers y los switches aceptan enlaces troncales
+
+
+*en un switch hay puertos en modo access y puertos en modo troncales. (modo access es para los equipos finales y troncales entre switches) (ojo que cualquier puerto en un switchs puede ser modo access o troncal, eso lo determinaremos al hacer
+la configuración)
+*en los puertos de modo troncal se permite el trafico de mas de una VLAN, y en los puertos de modo acceso solo el trafico para una VLAN. 
+*en los puertos de modo acceso nunca se utilizara el protocolo 802.1Q
+
+
+
+
+MULTILAYER SWITCH:
+--------------------
+*Es un equipo que combina las dos funcionalidades en un mismo equipo (de un switch y un router)
+*Es un equipo de capa 2 y de capa 3 a la vez.
+
+
+VLAN NATIVA:
+------------
+*Una VLAN nativa, conocida también como VLAN predeterminada o VLAN sin etiquetar, es una VLAN especial en una red que no tiene una etiqueta de VLAN, asociada
+*la VLAN nativa se utiliza para el trafico que no se etiqueta con un numero de VLAN.
+*La VLAN nativa es comunmente utilizada en configuraciones de redes que incluyen equipos que no son compatibles con el etiquetado de VLAN, como impresoras, dispositivos de red más antiguos o
+algunos dispositivos a la VLAN nativa, pueden comunicarse con otros dispositivos de la misma VLAN nativa, sin requerir configuraciones de etiquetado de VLAN en su configuración.
+*La VLAN nativa se da en ambos extremos de un enlaces troncal, y cuyas tramas pertenecientes a esa VLAN no diafaran etiquetadas a lo largo del enlace troncal, y por defecto vale 1
+ 
+
+crear una VLAN dentro de un SWITCH:
+------------------------------------
+Paso 1: Creacion VLAN  a nivel global
+Paso 2: Definir modo de puerto	
+Paso 3: Asignar VLAN a puerto 	(por defecto estaran en la vlan 1)
+
+
+	switch(config)#vlan numero_de_vlan					#una vez creamos la VLAN 1 por ejemplo, entrara automaticamente su configuracion
+		switch(config-vlan)#name nombre_vlan				#(opcional) para darle un nombre a esta vlan
+
+	switch(config)#interface fa 0/1
+		switch(config-if)#switchport mode access			#configura esa interfaz en modo acceso
+		switch(config-if)#switchport access vlan numero_de_vlan		#agrega esta interfaz a la vlan indicada, en caso no exista la crea
+
+	
+	switch(config)#interface range fa 0/1 - 6				#para configurar todas esas interfaces a la vez del 1 al 6
+	switch(config-range)#
+
+	swtich(config)#switchport trunk native vlan 8				#cambia la vlan nativa a la vlan indicada
+	
+
+	switch#sh vlan						#muestra todas las vlans creadas en el switch y que puertos estan trabajando con esa VLAN
+	switch#sh vlan id num_vlan				#nos muestra información de la vlan indicada	
+	switch#sh vlan brief					#muestra lo mismo pero mas resumido
+
+	switch#sh int fa 0/1 switchport				#nos da información respecto a la interfaz y su vlan	
+	switch#sh interfaces switchport				#nos da información para todas las interfaces
+
+	*es recomendable siempre configurar las interfaces en modo "no-automatico" (por seguridad)
+
+
+	
+
+	
+
+
+
+
+*-*forma2:
+**modo rapido:
+
+
+	switch(config)#interface Fa 0/1
+	switch(config-if)#switchport access vlan numero_de_vlan			#asignara la interfaz entrada a la vlan especificada
+										#aqui por defecto los puertos estaran en modo 'dinamic auto'(dtp)
+
+
+
+
+
+para crear conexiones trunk: (enlaces troncales)
+------------------------------
+Paso:
+
+1. definir encapsulación (depende del switch, es decir de la versión del switch)
+2. definir puerto en modo trunk
+
+	switch(config)#interface fa 0/1
+		switch(config-if)#switchport trunk encapsulation dot1q				#para definir la encapsulación (ya que en algunos switch se soporta 2 protocolos (802.1Q o ISL))
+		switch(config-if)#switchport mode trunk						#para configurar un puerto en modo trunk
+		
+	*recuerda que el otro extremo del enlace troncal debe la interfaz tambien ser trunk	
+	*por defecto el enlace troncal permitira el paso de todas las VLANS del switch
+
+
+3.definir VLANS permitidas (opcional)
+	
+	switch(config-if)#switchport trunk allowed vlan 1,2,5,33				#para permitir solo la vilas indicadas (1,2,5,33)
+						   vlan 1-33					#tambien podria ser asi (del 1 al 33)
+
+
+4.definir la VLAN nativa (opcional) (1 por defecto)
+	
+	switch(config-if)#switchport trunk native vlan 2					#para indicar que VLAN sera la nativa para este enlace truncal
+
+	switch(config-if)#switchport no-negotiate						#para que la interfaz este en modo de no negociar
+	
+	switch#show interfaces trunk								#nos muestra información de los enlaces truncales
+
+
+DYNAMIC TRUNKING PROTOCOL (DTP)
+-----------------------------------
+*Este protocolo se encarga de negociar en ambos extremos (switches) el modo operacional de como va funcionar un puerto (lo ideal y aconsejado es no utilizarlo nunca)
+
+
+**Modo administrativo:
+	-Dynamic Auto:	 		#De forma pasiva se encuentra a la espera de recibir mensajes de negociación, para que dado el caso, responda y negocie la utilización del puerto trunk
+	-Dynamic Desirable:		#incia de forma activa la negociación, enviando y respondiendo a los mensajes de negociación para determinar si el puerto puede funcionar como un trunk
+	-trunk:				#funciona siempre como puerto trunk
+	-access:			#funciona siempre como puerto access
+	
+**DTP: ON
+	*Grafica del resultado del modo operativo tras la negociación de ambos extremos del enlace truncal	
+
+	---------------------------------------------------------------------------------------------------------
+	|			|   DYNAMIC ACCESS    |   DYNAMIC DESIRABLE   |   TRUNK     |     ACCESS	|
+	---------------------------------------------------------------------------------------------------------
+	DYNAMIC ACCESS		|       access	      |          trunk	      |   trunk     |     access	|
+	---------------------------------------------------------------------------------------------------------
+	DYNAMIC DESIRABLE	|	trunk	      |          trunk	      |   trunk     |     access	|
+	---------------------------------------------------------------------------------------------------------
+	TRUNK			|       trunk	      | 	 trunk 	      |   trunk     |     ------	|
+	---------------------------------------------------------------------------------------------------------
+	ACCESS			|	access	      |          access	      |   ------    |     access	|     
+	---------------------------------------------------------------------------------------------------------
+
+
+	
+
+
+
+
+
+
+
+
+MODELO CLASSFULL (CLASES DE IP):
+------------------------------------
+
+CLASE A:
+	*del primer octeto, el primer bit es 0 y los otros 1. Los demas bits son de host (0...)
+	*redes muy grandes, coorporativas /gubernamentales
+	*en general si el primer octeto varia entre
+		> 1.0.0.0 -  126.255.255.255		
+		> Nº redes: 126
+		> Nº host x red: 16 millones
+
+
+CLASE B:
+	*ocupan 2 octetos para bits de red, de los cuales el segundo bit del primer octeto es (10...
+	*redes medianas grandes
+		> 128.0.0.0 - 191.255.255.255
+		> Nº redes 16384
+		> Nº host x red: 65534
+		
+
+CLASE C
+	*ocupan 3 octetos para bits de red, de los cuales el 3 bit del primer octeto es 0 (110...)
+	*redes pequeeñas
+		> 192.0.0.0  -  223.255.255.255
+		
+
+
+CLASE D 
+	*son por lo general para redes multicast
+		> 224.0.0.0  -  239.255.255.255
+		
+
+CLASE E
+	*son por lo general para redes multicast
+		> 240.0.0.0  -  254.255.255.255
+
+
+
+
+
+	REDES IPv4
+--------------------------------------------------
+redes privadas:
+------------------
+*Una red privada solo puede estar entre el rango de los siguientes intervalos IP. (estandar RFC 1918)
+*Técnicamente, puedes usar cualquier dirección IP. Fuera de estos rangos puede causar problemas de interoperabilidad y conflicto de direcciones, especialmente si alguna vez necesitas conectar tu red privada con otras redes que siguen los estándares de direcciones IP privadas comunes. Además, algunos dispositivos y sistemas pueden no ser compatibles o pueden experimentar problemas con direcciones IP que se encuentren fuera de los rangos estándar.
+
+> 10.0.0.0 - 10.255.255.255 (10.0.0.0/8)
+> 172.16.0.0 - 172.31.255.255 (172.16.0.0/12)
+> 192.168.0.0 - 192.168.255.255 (192.168.0.0/16)
+
+
+
+
+
+
+
+
+NAT (network address translation)
+-----------------------------------
+*Es un mecanismo utilizado para los routers para traducir ip por otras (se pueden traducir ips origen asi como destino)
+*Estas traduciones lo pueden hacer muchos equipos de capa 3, como el router, el firewall, el multilayer, etc.
+*hay dos tipos de traducciones NAT y PAT
+
+**NAT: Solo traduce la ip
+	-NAT estatico: las ips que se traducen son elegidas por el administrador
+		One-to-One: es configurar cada ip a otra ip
+	
+
+		src: 40.4.5.5:4441			src: 40.4.5:441
+		dst: 83.1.49:80				dst: 10.1.1.8:80
+			 ----->				   ----->
+		PC1				ROUTER			SERVIDOR
+			 		     (static NAT)
+					83.1.49.80 <--> 10.1.1.8
+
+			<-----					   <-----
+		   src: 83.1.49:80			        src: 10.1.1.8:80		
+		   dst: 40.4.5.5:4441				dst: 40.4.5.5:4441
+
+
+	pasos:
+		*definir las interfaces inside, y las interfaces outside
+		*aplicar el comando NAT especifico
+
+		router(config)#interfaz gigabitEthernet 0/0
+			router(config-if)#ip nat outside			#con este comando le decimos al router que esta es la interfaz outside (salida al exterior)
+		
+			router(config-if)#ip nat inside				#con este comando le decimos al router que esta es la interfaz outside (entrada a la red local)
+
+
+
+		router(config)#ip nat inside source static ip_inside_local  ip_inside_global		#solo traducira para la ip_local indicada OJO
+
+
+	-NAT dinamico: las ips que se traducen son elegidas por el router de forma dinamica
+
+
+
+		router#show ip nat statistics					#muestra las configuracion hechas a las interfaces estaticamente
+		router#show ip nat translations					#este comando nos muestra la tabla de traducciones NAT
+
+
+**PAT: Traduce la ip y el router
+	-PAT estatico: las ips y puertos que se traducen son elegidas por el administrador
+		One-to-many: es una ip configurada a muchas ip, solo lo determinara el puerto
+		portforwarding: el PAT, permite reenviar puertos
+		al aplicar PAT, todos los puertos estaran cerrados 
+		Se le puede indicar tambien, el puerto para que protocolo de capa 4 estara abierto.
+
+
+
+		router(config)#ip nat inside source static tcp ip_local puerto  ip_outside  puerto		#en vez de tcp pudo haber sido udp, esto es para hacer un PAT estatico en el router
+	
+
+	-PAT dinamico: las ips y puertos se traducen de forma dinamica por el router
+		Es unidireccional, solo traduce del inside al outside
+		traduce de forma dinamica para la red dada. el router o dispositivo se encarga de poner los puestos de forma correspondiente cuando estos pidan una solicitud al outside del router
+
+
+		router(config)#ip nat inside source list name_or_number_lista interface fa0/0 overload 		#para configurar nuestro pat dinamico, fa 0/0 indica con que ip transformara lo indicado en el access list, overload indica añadir esas 														traducciones
+		router(config)access-list number_standar permit  ip_match  mascara_wildcard			#ip_match hace referencia a la red ip que traducira, y mascara_wildcard a su mascara pero al reves, permit a que lo va permitir
+	
+
+
+
+
+Terminologia Cisco para NAT;
+-----------------------------
+*tener en cuenta que todo esto va variar respecto a la perspectiva del router.
+
+	-inside local: para la red interna del router	
+	-inside global: para la ip traducida del router que sale de la inside local
+	-outside local: para los dispositivos que se ven desde el router o de la red interna
+	-outside global: para como se un dispositivo desde cualquier dispositivo de internet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
